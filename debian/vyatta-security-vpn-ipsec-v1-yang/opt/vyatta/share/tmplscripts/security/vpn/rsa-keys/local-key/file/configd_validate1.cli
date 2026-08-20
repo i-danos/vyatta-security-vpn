@@ -1,0 +1,2 @@
+#!/opt/vyatta/bin/cliexpr
+commit:expression: exec "test -f '$VAR(@)' || echo 'Warning: RSA private key file '$VAR(@)' does not exist, you need to provide this before use.' || true";""

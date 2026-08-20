@@ -1,0 +1,11 @@
+Package: vyatta-op-reset-vpn-ipsec-remote-access-server-v1-yang
+Source: vyatta-security-vpn
+Version: 2.14
+Architecture: all
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Installed-Size: 19
+Depends: vyatta-security-vpn-ipsec-feature, vyatta-opd-extensions-v1-yang, vyatta-op-reset-v1-yang
+Section: net
+Priority: optional
+Description: vyatta-op-reset-vpn-ipsec-remote-access-server-v1 module
+ The YANG module for vyatta-op-reset-vpn-ipsec-remote-access-server-v1

@@ -1,0 +1,11 @@
+Package: vyatta-op-monitor-interfaces-vti-v1-yang
+Source: vyatta-security-vpn
+Version: 2.14
+Architecture: all
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Installed-Size: 21
+Depends: vyatta-security-vpn-ipsec-feature, vyatta-opd-extensions-v1-yang, vyatta-op-monitor-v1-yang, vyatta-op-monitor-interfaces-v1-yang
+Section: net
+Priority: optional
+Description: vyatta-op-monitor-interfaces-vti-v1 module
+ Operational mode integration for monitoring virtual tunnel interfaces

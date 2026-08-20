@@ -1,0 +1,3 @@
+misc:Depends=deb-vci-helper
+yang:Depends=
+misc:Pre-Depends=

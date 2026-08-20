@@ -1,0 +1,11 @@
+Package: vyatta-security-vpn-ipsec-vfp-v1-yang
+Source: vyatta-security-vpn
+Version: 2.14
+Architecture: all
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Installed-Size: 19
+Depends: vyatta-security-vpn-ipsec-feature, vyatta-security-v1-yang, vyatta-security-vpn-ipsec-v1-yang, vyatta-security-vpn-ipsec-remote-access-server-v1-yang, vyatta-interfaces-v1-yang, vyatta-interfaces-vfp-v1-yang, configd-v1-yang
+Section: net
+Priority: optional
+Description: vyatta-security-vpn-ipsec-vfp-v1 module
+ The YANG module for vyatta-security-vpn-ipsec-vfp-v1

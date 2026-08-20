@@ -1,0 +1,13 @@
+Package: vyatta-interfaces-vti-v1-yang
+Source: vyatta-security-vpn
+Version: 2.14
+Architecture: all
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Installed-Size: 40
+Depends: vyatta-cfg (>= 0.117), vyatta-interfaces, vyatta-interfaces-v1-yang, vyatta-types-v1-yang, configd-v1-yang
+Breaks: vyatta-cfg-system (<< 1.6.0)
+Replaces: vyatta-cfg-system (<< 1.6.0)
+Section: net
+Priority: optional
+Description: vyatta-interfaces-vti-v1 module
+ VTI interface configuration

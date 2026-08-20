@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_vci_enable/UNDECLARED
+deb-vci-helper remove vci-security-vpn-ipsec >/dev/null
+# End automatically added section

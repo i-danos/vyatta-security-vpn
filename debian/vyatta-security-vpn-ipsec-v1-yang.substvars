@@ -1,0 +1,3 @@
+yang:Depends=vyatta-security-v1-yang, vyatta-types-v1-yang, configd-v1-yang, vyatta-interfaces-v1-yang
+misc:Depends=
+misc:Pre-Depends=

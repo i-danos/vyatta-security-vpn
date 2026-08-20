@@ -1,0 +1,11 @@
+Package: vci-security-vpn-ipsec
+Source: vyatta-security-vpn
+Version: 2.14
+Architecture: amd64
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Installed-Size: 24
+Depends: python3, vyatta-security-vpn-ipsec-feature, deb-vci-helper
+Section: net
+Priority: optional
+Description: IPsec VCI Component
+ Component to handle requests for IPsec features
