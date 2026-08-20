@@ -12,10 +12,8 @@ dh_installchangelogs
 dh_systemd_enable
 dh_systemd_enable
 dh_systemd_enable
-dh_systemd_enable
 dh_installinit
 dh_vci_enable
-dh_systemd_start
 dh_systemd_start
 dh_systemd_start
 dh_systemd_start

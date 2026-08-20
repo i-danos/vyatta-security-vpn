@@ -1,3 +1,34 @@
+vyatta-security-vpn (2.15) unstable; urgency=medium
+
+  * Use Debian's strongswan-starter unit instead of shipping another one.
+    This package carried its own vyatta-strongswan-starter.service and had
+    the postinst rename it over strongswan.service, because buster's
+    strongswan packaging shipped no unit of its own. trixie ships two --
+    strongswan-starter.service for the ipsec.conf stack and
+    strongswan.service for swanctl -- so the rename landed on top of a real
+    package file and left two enabled units racing for the same daemon:
+
+      ipsec: starter is already running (/var/run/starter.charon.pid
+        exists) -- no fork done
+      systemd: strongswan.service: Can't open PID file '/run/charon.pid'
+        (yet?) after start: No such file or directory
+
+    It also left /usr/lib/systemd/system/strongswan.service owned by no
+    package at all, since dpkg had recorded it under the old name.
+
+    Nothing is lost by dropping ours. Debian's unit already carries the two
+    things this one added -- ExecReload and Restart=on-abnormal -- and runs
+    the daemon with --nofork, so systemd supervises the process directly
+    instead of chasing a pid file. The only line not carried over is
+    StandardOutput=syslog, which current systemd warns about anyway.
+
+    The scripts that start, restart and drop config into the unit now name
+    strongswan-starter.service, and the auto-update drop-in directory moves
+    with them. Naming strongswan.service would now reach swanctl's daemon,
+    which is not the stack this package configures.
+
+ -- DANOS Package Maintainers <DANOS@att.com>  Thu, 21 Aug 2026 00:00:00 +0000
+
 vyatta-security-vpn (2.14) unstable; urgency=medium
 
   [ kalaivani vinothkumar ]

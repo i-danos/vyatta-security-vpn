@@ -6,12 +6,12 @@ e5ba1da85543bf07a7b95bc83c6e217a  opt/vyatta/bin/vyatta-op-vpn.pl
 95ea7a7cc164c2f17fc53ad07167d487  opt/vyatta/bin/vyatta-pki
 937ffefa072e2a62121d5667a4f64cf6  opt/vyatta/bin/vyatta-show-vpn-debug.sh
 fd99b6f4ba440f469bcb2b20af081f23  opt/vyatta/bin/vyatta-show-vpn.pl
-87c453e7d7f21faea41501e01046ac24  opt/vyatta/bin/vyatta-vpn-op.pl
+323d6afc5881cc53cdd10a112e59d26d  opt/vyatta/bin/vyatta-vpn-op.pl
 cfc01277cb7d712dfa412ffc02bf1de2  opt/vyatta/etc/key-pair.template
 d509eb8f529a820951b12e82d8b7fa05  opt/vyatta/sbin/vfp-config.pl
 0c5e897fa366ba982e0cffa04fedb80c  opt/vyatta/sbin/vpn-config-global-ike
 d504d189310f135aeda25cadc3bbeb0c  opt/vyatta/sbin/vpn-config-vici
-ba92f14f060740c30bc19389799cd62b  opt/vyatta/sbin/vpn-config.pl
+fa8b60a6b1d1acf4c270bc24b0cacf74  opt/vyatta/sbin/vpn-config.pl
 b427bba62dd987dcf1bc02a7e41978e4  opt/vyatta/sbin/vyatta-gen-x509-keypair.sh
 bf276327328f181d2a1405a231cd171d  opt/vyatta/sbin/vyatta-ipsec-rekey
 737dd0c881aaefa7f02833f56b5ac8c6  opt/vyatta/sbin/vyatta-op-vpn-ipsec-vici
@@ -119,7 +119,6 @@ b7559a1783977be5ba1e110ab8cc65a2  usr/lib/ipsec/vyatta-ext-fetcher
 23067444f1f8c26746f6128057d89b90  usr/lib/ipsec/vyatta-updown-helper.sh
 859e6346825eea9ac67e8fbb8600e237  usr/lib/python3/dist-packages/vyatta/vpn/ipsec/config.py
 096fc67793a8646586eb0d285984e075  usr/lib/systemd/system/vyatta-ipsec-rekey.service
-100cb3a6484e1201f1ce67b1898b5145  usr/lib/systemd/system/vyatta-strongswan-starter.service
 9ff2151226700559e46df87240a00dbf  usr/lib/tmpfiles.d/vyatta-ipsec.conf
 b8f28b474ac534ab21192011cfca30a5  usr/share/doc/vyatta-security-vpn/changelog.gz
 080e29b614d82ee2d74e98e487dc83ab  usr/share/doc/vyatta-security-vpn/copyright

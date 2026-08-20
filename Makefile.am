@@ -57,7 +57,7 @@ install-exec-hook:
 	mkdir -p $(DESTDIR)/usr/lib/ipsec/
 	mkdir -p $(DESTDIR)/var/lib/vyatta-security-vpn/vfp/
 	mkdir -p $(DESTDIR)/var/lib/vyatta-security-vpn/vti/
-	mkdir -p $(DESTDIR)/etc/systemd/system/strongswan.service.d/
+	mkdir -p $(DESTDIR)/etc/systemd/system/strongswan-starter.service.d/
 	cp scripts/ipsecd-dhclient-hook $(DESTDIR)$(dhcphookdir)/ipsecd
 	install -m755 -t $(DESTDIR)/usr/lib/ipsec/ scripts/vti-up-down.sh \
 		scripts/vyatta-dataplane-s2s-updown \

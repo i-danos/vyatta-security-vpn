@@ -5,7 +5,7 @@ usr/lib/ipsec/
 /opt/vyatta/sbin
 opt/vyatta/share
 etc/logrotate.d/
-etc/systemd/system/strongswan.service.d/
+etc/systemd/system/strongswan-starter.service.d/
 python/vyatta/vpn/ipsec/*.py usr/lib/python3/dist-packages/vyatta/vpn/ipsec
 tmpfiles.d/vyatta-ipsec.conf usr/lib/tmpfiles.d
 tmplscripts/security/vpn/configd_end.sh	opt/vyatta/share/tmplscripts/security/vpn/

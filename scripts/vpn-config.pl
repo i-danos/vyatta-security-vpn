@@ -1413,7 +1413,7 @@ if ( $vcVPN->isDeleted('.')
     my $update_interval_orig = $vcVPN->returnOrigValue("ipsec auto-update");
     $update_interval_orig = 0 if !defined($update_interval_orig);
 
-    my $systemd_unit_config_path = '/etc/systemd/system/strongswan.service.d/auto-update.conf';
+    my $systemd_unit_config_path = '/etc/systemd/system/strongswan-starter.service.d/auto-update.conf';
     if ($update_interval && ($update_interval != $update_interval_orig)) {
         # https://bugzilla.redhat.com/show_bug.cgi?id=756787#c9
         my $systemd_unit_config =<<EOF;
@@ -1430,11 +1430,11 @@ EOF
     if ( is_vpn_running() ) {
         if ($update_interval && ($update_interval != $update_interval_orig)) {
             print "Re-starting IPsec daemon to activate new auto-update interval...\n";
-            vpn_exec( 'systemctl restart strongswan.service',
+            vpn_exec( 'systemctl restart strongswan-starter.service',
                       're-starting ipsec with updated auto-update interval $update_interval' );
         } elsif (!$update_interval && $update_interval_orig) {
             print "Re-starting IPsec daemon to deactivate auto-update...\n";
-            vpn_exec( 'systemctl restart strongswan.service',
+            vpn_exec( 'systemctl restart strongswan-starter.service',
                       're-starting ipsec' );
         } else {
 	    for my $conn (@CHANGED_IKE_SAS) {
@@ -1450,7 +1450,7 @@ EOF
 		      'update changes to ipsec.conf and update' );
         }
     } else {
-        vpn_exec( 'systemctl restart strongswan.service', 'start/restart ipsec' );
+        vpn_exec( 'systemctl restart strongswan-starter.service', 'start/restart ipsec' );
     }
   }
 }

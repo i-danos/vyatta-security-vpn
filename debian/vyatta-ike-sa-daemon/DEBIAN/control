@@ -3,7 +3,7 @@ Source: vyatta-security-vpn
 Version: 2.14
 Architecture: amd64
 Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
-Installed-Size: 139
+Installed-Size: 137
 Depends: python3, python3-dbus, python3-gi, python3-pyinotify, python3-pysnmp4, python3-vici (>= 5.8.2), vyatta-security-vpn-ipsec-feature
 Conflicts: vyatta-ipsec-trapd (<< 0.0.16)
 Replaces: vyatta-ipsec-trapd (<< 0.0.16)

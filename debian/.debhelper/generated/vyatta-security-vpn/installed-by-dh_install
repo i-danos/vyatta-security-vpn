@@ -5,7 +5,7 @@ debian/tmp/opt/vyatta/etc
 debian/tmp/opt/vyatta/sbin
 debian/tmp/opt/vyatta/share
 ./etc/logrotate.d/
-debian/tmp/etc/systemd/system/strongswan.service.d/
+debian/tmp/etc/systemd/system/strongswan-starter.service.d/
 ./python/vyatta/vpn/ipsec/config.py
 ./tmpfiles.d/vyatta-ipsec.conf
 ./tmplscripts/security/vpn/configd_end.sh
