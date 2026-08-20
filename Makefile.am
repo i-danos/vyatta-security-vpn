@@ -71,6 +71,8 @@ install-exec-hook:
 	cp scripts/1900-vyatta-vpn-ipsec $(DESTDIR)$(techsprtdir)
 	mkdir -p $(DESTDIR)/$(pysnmp_mibdir)
 	cp $(snmp_mibdir)/SNMPv2-SMI.txt mibs/
+	cp $(snmp_mibdir)/SNMPv2-TC.txt mibs/
+	cp $(snmp_mibdir)/SNMPv2-CONF.txt mibs/
 	cp $(snmp_mibdir)/BROCADE-REG-MIB.txt mibs/
 	mibdump --mib-borrower=/usr/share/snmp/mibs/ \
 		--destination-directory=$(DESTDIR)/$(pysnmp_mibdir) \
