@@ -1,4 +1,4 @@
-vyatta-security-vpn (2.15) unstable; urgency=medium
+vyatta-security-vpn (2.16) unstable; urgency=medium
 
   * Make the package's own test suite pass again.
     dh_auto_test runs pylint over vyatta-ike-sa-daemon, and the version in
@@ -24,6 +24,10 @@ vyatta-security-vpn (2.15) unstable; urgency=medium
     daemon uses that style throughout, and rewriting every one of them
     changes nothing at runtime while offering plenty of chances to get a
     format string wrong.
+
+ -- DANOS Package Maintainers <DANOS@att.com>  Thu, 21 Aug 2026 02:00:00 +0000
+
+vyatta-security-vpn (2.15) unstable; urgency=medium
 
   * Use Debian's strongswan-starter unit instead of shipping another one.
     This package carried its own vyatta-strongswan-starter.service and had
