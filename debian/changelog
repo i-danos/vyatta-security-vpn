@@ -1,5 +1,30 @@
 vyatta-security-vpn (2.15) unstable; urgency=medium
 
+  * Make the package's own test suite pass again.
+    dh_auto_test runs pylint over vyatta-ike-sa-daemon, and the version in
+    trixie found enough to fail the build, so the package could only be
+    built with DEB_BUILD_OPTIONS=nocheck.
+
+    Three of the findings were real. default_community and trap_source are
+    only assigned when the SNMP general section is present, but are read
+    unconditionally afterwards -- on a router with trap targets and no
+    general section that is a NameError, not a warning. sdconn is assigned
+    in __main__ and used from D-Bus methods and the daemon loop, which
+    worked but left the name undefined as far as any reader or checker was
+    concerned; it is declared at module scope now. And two except clauses
+    bound an exception they never looked at, one of which sat next to
+    another that does use it -- easy to confuse.
+
+    The rest were housekeeping: threading.currentThread().getName() has
+    been deprecated since 3.10, two open() calls did not say what encoding
+    they wanted, and a loop indexed a dict it was already iterating.
+
+    consider-using-f-string is turned off alongside the style checks this
+    tree already ignores. It fires on roughly 140 str.format() calls; the
+    daemon uses that style throughout, and rewriting every one of them
+    changes nothing at runtime while offering plenty of chances to get a
+    format string wrong.
+
   * Use Debian's strongswan-starter unit instead of shipping another one.
     This package carried its own vyatta-strongswan-starter.service and had
     the postinst rename it over strongswan.service, because buster's

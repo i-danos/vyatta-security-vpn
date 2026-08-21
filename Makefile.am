@@ -85,5 +85,9 @@ coverage:
 
 check:
 	perlcritic -5 .
-	$(PYLINT) -d R,too-many-lines,invalid-name,missing-docstring \
+# consider-using-f-string is disabled alongside the other style checks this
+# tree does not follow: the daemon uses str.format() throughout, and newer
+# pylint reports every one of ~140 call sites. Rewriting them buys nothing
+# at runtime and is a lot of churn to get wrong in a daemon.
+	$(PYLINT) -d R,too-many-lines,invalid-name,missing-docstring,consider-using-f-string \
 		scripts/vyatta-ike-sa-daemon

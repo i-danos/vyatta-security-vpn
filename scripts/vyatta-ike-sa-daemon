@@ -135,7 +135,7 @@ def dbg(component, s):
     _log(syslog.LOG_DEBUG, component, s)
 
 def _log(loglevel, component, s):
-    myname = threading.currentThread().getName()
+    myname = threading.current_thread().name
 
     if loglevel <= LOGLevelConfig.get(component, syslog.LOG_NOTICE):
         syslog.syslog(loglevel, '[{}] [{}] {}'.format(myname, LOGName[component], s))
@@ -188,7 +188,7 @@ def reload_snmp_cfg(config):
 
 def uptimeTicks():
     ticksHz = 100
-    with open('/proc/uptime') as f:
+    with open('/proc/uptime', encoding='utf-8') as f:
         seconds = float(f.readline().split()[0])
         return seconds * ticksHz
 
@@ -202,6 +202,8 @@ def notifier_cb(source, condition, userdata):
 def send_child_sa_trap(up, ike_sa, child_sa):
 
     sys_descr = None
+    default_community = ''
+    trap_source = None
 
     # check for update SNMP trap config and update hostname
     hostname = platform.node()
@@ -1707,7 +1709,7 @@ class Daemon:
                                 nhrp_maps = tunnel['nhrp']['map']
                                 local_ip = tunnel['local-ip']
                                 break
-                    except KeyError as e:
+                    except KeyError:
                         continue
 
                     # Skip DMVPN Hub setups
@@ -2080,7 +2082,7 @@ class Daemon:
             config_file = DAEMON_CONF
 
         try:
-            with open(config_file) as fd:
+            with open(config_file, encoding='utf-8') as fd:
                 top_cfg = json.load(fd)
         except IOError as e:
             # (re)boot case
@@ -2283,7 +2285,7 @@ class Daemon:
                 dbg(LOG.JOB, 'Job {} started'.format(job.name))
                 job.run(vs)
                 dbg(LOG.JOB, 'Job {} completed'.format(job.name))
-            except BrokenPipeError as e:
+            except BrokenPipeError:
                 # VICI socket is gone. Probably charon shutdown. shutdown worker thread.
                 return False
             except SkipJobException:
@@ -2567,8 +2569,8 @@ class Daemon:
     def dump_conns_job_queue(self):
         with self.lock_conns_job_queue:
             ret = ''
-            for q in self.conns_job_queue:
-                ret += '{}: {};'.format(q, self.conns_job_queue[q].queue)
+            for q, jq in self.conns_job_queue.items():
+                ret += '{}: {};'.format(q, jq.queue)
             return ret
 
     def log_conns_job_queue(self):
@@ -2591,6 +2593,10 @@ class Daemon:
         stats.update([('child_updown_refcount', self._child_updown_refcount)])
 
         return ppformat(stats)
+
+# systemd notification handle, set up in __main__ below and used by the
+# D-Bus methods and the daemon loop.
+sdconn = None
 
 if __name__ == '__main__':
 
