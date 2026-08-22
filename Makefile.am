@@ -70,9 +70,26 @@ install-exec-hook:
 	mkdir -p $(DESTDIR)$(techsprtdir)
 	cp scripts/1900-vyatta-vpn-ipsec $(DESTDIR)$(techsprtdir)
 	mkdir -p $(DESTDIR)/$(pysnmp_mibdir)
-	cp $(snmp_mibdir)/SNMPv2-SMI.txt mibs/
-	cp $(snmp_mibdir)/SNMPv2-TC.txt mibs/
-	cp $(snmp_mibdir)/SNMPv2-CONF.txt mibs/
+# SNMPv2-SMI/TC/CONF are now shipped in mibs/ rather than copied in from
+# /usr/share/snmp/mibs. That directory only gets them from
+# snmp-mibs-downloader, which is non-free and absent from OBS's Debian 13
+# mirror, so the copy failed there:
+#
+#     cp: cannot stat '/usr/share/snmp/mibs/SNMPv2-SMI.txt': No such file or directory
+#
+# They have to be present as MIB *source*: BROCADE-IPSEC-MIB.txt opens with
+# "IMPORTS ... FROM SNMPv2-SMI / FROM SNMPv2-CONF", and mibdump only parses
+# sources into its symbol table. Pointing --mib-borrower at pysnmp's
+# pre-compiled SNMPv2-*.py does not work -- borrowed MIBs are not parsed:
+#
+#     Failed MIBs: BROCADE-IPSEC-MIB (no module "SNMPv2-SMI" in symbolTable)
+#
+# Only the MIBs named on the mibdump command line are emitted, so shipping the
+# sources does not add SNMPv2-*.py to the package and there is no file conflict
+# with python3-pysnmp4, which owns that directory.
+#
+# BROCADE-REG-MIB.txt still comes from /usr/share/snmp/mibs; vyatta-mibs-misc
+# installs it there and is already a Build-Depends.
 	cp $(snmp_mibdir)/BROCADE-REG-MIB.txt mibs/
 	mibdump --mib-borrower=/usr/share/snmp/mibs/ \
 		--destination-directory=$(DESTDIR)/$(pysnmp_mibdir) \
