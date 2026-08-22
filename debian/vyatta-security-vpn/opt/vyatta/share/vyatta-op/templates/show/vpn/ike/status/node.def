@@ -1,2 +1,0 @@
-help: Show summary of IKE process information
-run: vyatta-op-vpn.pl --show-ike-status

@@ -1,2 +1,0 @@
-help: Show status of IPsec process
-run: vyatta-op-vpn.pl --show-ipsec-status

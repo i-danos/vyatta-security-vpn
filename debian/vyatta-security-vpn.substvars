@@ -1,4 +1,0 @@
-perl:Depends=perl:any
-yang:Depends=
-misc:Depends=
-misc:Pre-Depends=

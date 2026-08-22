@@ -1,3 +1,0 @@
-yang:Depends=vyatta-opd-extensions-v1-yang, vyatta-op-show-v1-yang, vyatta-op-show-interfaces-v1-yang
-misc:Depends=
-misc:Pre-Depends=

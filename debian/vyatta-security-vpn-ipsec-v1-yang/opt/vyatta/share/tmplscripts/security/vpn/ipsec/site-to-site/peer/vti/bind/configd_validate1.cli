@@ -1,2 +1,0 @@
-#!/opt/vyatta/bin/cliexpr
-commit:expression: $VAR(@) in $VAR(/interfaces/vti/@@) ; "Interface '$VAR(@)' does not exist"

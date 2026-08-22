@@ -1,2 +1,0 @@
-help: Show VPN RSA keys
-run: vyatta-show-vpn.pl rsa-keys

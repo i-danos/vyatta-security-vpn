@@ -1,2 +1,0 @@
-#!/opt/vyatta/bin/cliexpr
-syntax:expression: exec "/opt/vyatta/sbin/vyatta-validate-type.pl protocol '$VAR(@)'"; "invalid protocol '$VAR(@)'"

@@ -1,4 +1,0 @@
-help: Show statistics of all active tunnels that have IPsec Security Associations (SA)
-run:
-    vyatta-op-vpn.pl --show-ipsec-sa-stats
-    vyatta-op-vpn-ipsec-vici --show-ipsec-sa=stats
