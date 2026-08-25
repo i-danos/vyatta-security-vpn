@@ -205,20 +205,20 @@ sub _charon_ipsec_statusall_parse_connections {
             $state_obj->{'last_ike_sa'} = $conn;
         }
         # fprintf("%12s:   %s uses ")
-        if (/:\s+local:(.*)uses/xm) {
+        elsif (/:\s+local:(.*)uses/xm) {
             $state_obj->{'last_ike_sa'} = $conn;
             if (my ($lid) = $1 =~ /\[(.*)\]/xm) {
                 $conn->{_lid} = conv_id($lid);
             }
         }
-        if (/:\s+remote:(.*)uses/xm) {
+        elsif (/:\s+remote:(.*)uses/xm) {
             $state_obj->{'last_ike_sa'} = $conn;
             if (my ($rid) = $1 =~ /\[(.*)\]/xm) {
                 $conn->{_rid} = conv_id($rid);
             }
         }
         # fprintf("%12s:   child:  %#R=== %#R%N")
-        if (/:\s+child:\s+([^\s\[]*)(\[.*\])?\s===\s([^\s\[]*)(\[.*\])?/xm) {
+        elsif (/:\s+child:\s+([^\s\[]*)(\[.*\])?\s===\s([^\s\[]*)(\[.*\])?/xm) {
 
             $conn->{_lsnet} = $1;
             ($conn->{_lproto}, $conn->{_lport}) = conv_proto_port($2) if defined($2);
@@ -303,13 +303,11 @@ sub _charon_ipsec_statusall_parse_security_associations {
         for ($line) {
             if (/:\sCONNECTING/xm) {
                 $conn->{_ikestate} = 'init';
-                continue;
             }
             if (/:\sESTABLISHED\ (\d+)\ (.*?)\ ago/xm) {
                 $conn->{_ikestate} = 'up';
                 ( $conn->{_ikeatime} ) = tnormal($1, $2);
                 ( $conn->{_newestike} ) = $sa_id =~ /(\d+)/xm;
-                continue;
             }
             # fprintf(", %#H[%Y]...%#H[%Y]\n")
             # NOTE: Vyatta specific strongswan patch prints additional [$port] brackets.
@@ -324,7 +322,7 @@ sub _charon_ipsec_statusall_parse_security_associations {
                 $conn->{_peerid} = $conn->{_rip} unless defined $conn->{_peerid};
             }
             # NOTE: Vanilla strongswan - WITHTOUT patch which prints additional [$port] brackets.
-            if (/,\s(.*?)\[(.*?)\]\.\.\.(.*?)\[(.*?)\]$/xm) {
+            elsif (/,\s(.*?)\[(.*?)\]\.\.\.(.*?)\[(.*?)\]$/xm) {
                 $conn->{_lip}    = $1;
                 $conn->{_lid}    = conv_id($2);
                 $conn->{_rip}    = $3;
@@ -333,12 +331,12 @@ sub _charon_ipsec_statusall_parse_security_associations {
                 $conn->{_peerid} = $conn->{_rip} unless defined $conn->{_peerid};
             }
             # fprintf("%12s[%d]: %N SPIs: %.16"PRIx64"_i%s %.16"PRIx64"_r%s")
-            if (/:\sIKEv(\d)\sSPIs:\s.*?_i\*?\s.*?_r\*?/xm) {
+            elsif (/:\sIKEv(\d)\sSPIs:\s.*?_i\*?\s.*?_r\*?/xm) {
                 # otherwise not interested in IKE SPI
                 $conn->{_ikever} = $1;
             }
             # fprintf("%12s[%d]: IKE proposal: %s\n")
-            if (/:\sIKE\sproposal:\s(.*?)\/(.*?)\/(.*?)\/(.*?)$/xm) {
+            elsif (/:\sIKE\sproposal:\s(.*?)\/(.*?)\/(.*?)\/(.*?)$/xm) {
                 $conn->{_ikeencrypt} = $1;
                 $conn->{_ikehash}    = $2;
                 $conn->{_ikeprf}     = $3;
@@ -353,22 +351,18 @@ sub _charon_ipsec_statusall_parse_security_associations {
             $conn->{_said} = $sa_id =~ tr/{}//dr;
             if (/:\s+(INSTALLED|CREATED|ROUTED|UPDATING|REKEYING|DELETING|DESTROYING),/xm) {
                 $conn->{_state} = 'up';
-                continue;
             }
             if (/:\s+INSTALLING,/xm) {
                 $conn->{_state} = 'down';
-                continue;
             }
             # rekeyed CHILD_SA are stale until they expire. Ignore them.
             if (/:\s+REKEYED,/xm) {
                 $conn->{_state} = undef;
-                continue;
             }
             # with 5.3.0 reqid got added in stroke_list.c
             # no longer unique per CHILD_SA
             if (/,\ reqid\ (\d+),/xm) {
                 $conn->{_reqid} = $1;
-                continue;
             }
             # fprintf(", %N%s SPIs: %.8x_i %.8x_o")
             if (/,\sESP\s([\s\w]+[^\s])?\s?SPIs:\s(.*?)_i\s(.*?)_o/xm) {
@@ -379,7 +373,7 @@ sub _charon_ipsec_statusall_parse_security_associations {
             }
             # parse proposal and inbytes in one go
             # fprintf(", %" PRIu64 " bytes_i")
-            if (/:\s+(.*?),\s(\d+)\sbytes_i/xm) {
+            elsif (/:\s+(.*?),\s(\d+)\sbytes_i/xm) {
                 my ($proposal, $inbytes) = ($1, $2);
                 # strip extended sequence numbers
                 $proposal =~ s/\/ESN$//xm;
@@ -400,13 +394,12 @@ sub _charon_ipsec_statusall_parse_security_associations {
                     $conn->{_pfsgrp} = $dh;
                 }
                 $conn->{_inbytes} = $inbytes;
-                continue;
             }
             # fprintf(", %" PRIu64 " bytes_o")
             if (/,\s(\d+)\sbytes_o/xm) {
                 $conn->{_outbytes} = $1;
             }
-            if (/:\s+([^\s\[]*)(\[.*\])?\s===\s([^\s\[]*)(\[.*\])?/xm) {
+            elsif (/:\s+([^\s\[]*)(\[.*\])?\s===\s([^\s\[]*)(\[.*\])?/xm) {
                 $conn->{_lsnet} = $1;
                 ($conn->{_lproto}, $conn->{_lport}) = conv_proto_port($2) if defined($2);
                 $conn->{_rsnet} = $3;
