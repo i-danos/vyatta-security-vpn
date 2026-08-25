@@ -406,7 +406,7 @@ RSAPublicKey ::= SEQUENCE {
 }
 ASN1
         }
-        if ($_ eq 'PRIVATE KEY') {
+        elsif ($_ eq 'PRIVATE KEY') {
             $asn->prepare(<<ASN1) or croak "prepare: ", $asn->error;
 PrivateKeyInfo ::= SEQUENCE {
   version         Version,
@@ -423,7 +423,7 @@ AlgorithmIdentifier ::= SEQUENCE {
 ASN1
             $asn = $asn->find("PrivateKeyInfo");
         }
-        if ($_ eq 'PUBLIC KEY') {
+        elsif ($_ eq 'PUBLIC KEY') {
             $asn->prepare(<<ASN1) or croak "prepare: ", $asn->error;
 PublicKeyInfo ::= SEQUENCE {
   algorithm       AlgorithmIdentifier,
@@ -475,7 +475,7 @@ sub get_pki_key_type {
             if ($_ eq '1.2.840.113549.1.1.1') {
                 return 'RSA';
             }
-            if ($_ eq '1.2.840.10045.2.1') {
+            elsif ($_ eq '1.2.840.10045.2.1') {
                 return 'ECDSA';
             }
             else {
