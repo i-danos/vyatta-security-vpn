@@ -37,7 +37,6 @@ use Carp qw(croak);
 
 # disable warnings on experimental when
 no if $] >= 5.018, warnings => "experimental::smartmatch";
-use feature qw(switch);
 
 use parent 'Exporter';
 our @EXPORT_OK = qw(conv_dh_group conv_enc conv_hash conv_natt conv_id_rev
@@ -193,11 +192,11 @@ sub conv_id_rev {
 sub conv_blocked {
     my ($blocked_state) = @_;
 
-    given ($blocked_state) {
-      return 'n/a' when (undef);
-      return 'yes' when (1);
-      return 'no' when (0);
-      default { croak "Unexpected value: $blocked_state" }
+    for ($blocked_state) {
+      if (!defined($_)) { return 'n/a'; }
+      elsif ($_ == 1) { return 'yes'; }
+      elsif ($_ == 0) { return 'no'; }
+      else { croak "Unexpected value: $blocked_state" }
     }
 }
 

@@ -22,7 +22,6 @@ use warnings;
 
 # disable warnings on experimental when
 no if $] >= 5.018, warnings => "experimental::smartmatch";
-use feature qw(switch);
 
 use parent qw(Exporter);
 our @EXPORT_OK = qw(as_raw_key conv_id conv_protocol enableICMP get_daemon_pid
@@ -372,10 +371,10 @@ sub ip_cmp {
 sub tnormal
 {
     my ($num, $units) = @_;
-    given ($units) {
-        $num *= 86400 when ("days");
-        $num *= 3600 when ("hours");
-        $num *= 60 when ("minutes");
+    for ($units) {
+        if ($_ eq "days") { $num *= 86400; }
+        elsif ($_ eq "hours") { $num *= 3600; }
+        elsif ($_ eq "minutes") { $num *= 60; }
     }
     return $num;
 }
@@ -398,8 +397,8 @@ sub decode_pem_asn1 {
     my ($type, $data) = @_;
     my $asn = Convert::ASN1->new;
 
-    given ($type) {
-        when ('RSA PUBLIC KEY') {
+    for ($type) {
+        if ($_ eq 'RSA PUBLIC KEY') {
             $asn->prepare(<<ASN1) or croak "prepare: ", $asn->error;
 RSAPublicKey ::= SEQUENCE {
     modulus           INTEGER,
@@ -407,7 +406,7 @@ RSAPublicKey ::= SEQUENCE {
 }
 ASN1
         }
-        when ('PRIVATE KEY') {
+        if ($_ eq 'PRIVATE KEY') {
             $asn->prepare(<<ASN1) or croak "prepare: ", $asn->error;
 PrivateKeyInfo ::= SEQUENCE {
   version         Version,
@@ -424,7 +423,7 @@ AlgorithmIdentifier ::= SEQUENCE {
 ASN1
             $asn = $asn->find("PrivateKeyInfo");
         }
-        when ('PUBLIC KEY') {
+        if ($_ eq 'PUBLIC KEY') {
             $asn->prepare(<<ASN1) or croak "prepare: ", $asn->error;
 PublicKeyInfo ::= SEQUENCE {
   algorithm       AlgorithmIdentifier,
@@ -437,7 +436,7 @@ AlgorithmIdentifier ::= SEQUENCE {
 ASN1
             $asn = $asn->find("PublicKeyInfo");
         }
-        default {
+        else {
             croak "decode: unsupported type \"$type\"\n";
         }
     }
@@ -472,14 +471,14 @@ sub get_pki_key_type {
     my $result = decode_pem_asn1($asn->{type}, $asn->{data});
     if (exists $result->{algorithm}) {
 
-        given ($result->{algorithm}->{algorithm}) {
-            when ('1.2.840.113549.1.1.1') {
+        for ($result->{algorithm}->{algorithm}) {
+            if ($_ eq '1.2.840.113549.1.1.1') {
                 return 'RSA';
             }
-            when ('1.2.840.10045.2.1') {
+            if ($_ eq '1.2.840.10045.2.1') {
                 return 'ECDSA';
             }
-            default {
+            else {
                 croak $result->{algorithm}->{algorithm};
             }
         }
