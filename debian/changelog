@@ -1,3 +1,31 @@
+vyatta-security-vpn (2.17) unstable; urgency=medium
+
+  * Replace given/when with if/elsif in the VPN Perl modules.
+
+    Perl deprecated the switch feature in 5.38 and removed it in 5.42. Debian 13
+    ships 5.40, where these still run but print a deprecation warning per
+    construct -- on stdout, so the warnings land in the middle of op-mode output:
+
+      $ show vpn ipsec sa
+      given is deprecated at /opt/vyatta/share/perl5/Vyatta/VPN/Util.pm line 375.
+      when is deprecated at .../Util.pm line 376.
+      ...
+
+    The SA table is buried, and anything parsing that output sees nothing it
+    recognises -- which is how this surfaced, as the DANOS IPSEC_VPN suite
+    failing to validate a tunnel that was in fact configured.
+
+    38 constructs across Util.pm, Charon.pm and OPMode.pm. The enclosing block
+    is kept so behaviour does not change: "for (EXPR)" already sets $_, so a
+    when chain becomes if/elsif and default becomes else. That is only valid
+    because no code follows any of these chains inside its loop -- "when"
+    carries an implicit next and if/elsif does not -- which was checked for each
+    block. Smartmatch is replaced by what it actually did for these operands:
+    a regex stays a match against $_, a string becomes eq, a number ==, and
+    "when (undef)" becomes !defined.
+
+ -- i-danos <miwide20190328@gmail.com>  Tue, 25 Aug 2026 15:54:47 +0800
+
 vyatta-security-vpn (2.16) unstable; urgency=medium
 
   * Make the package's own test suite pass again.
