@@ -1,0 +1,20 @@
+# autoconf/automake output
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache/
+/config/
+/config.log
+/config.status
+/configure
+/tests/Makefile
+/tests/Makefile.in
+
+# automake test-suite results (make check)
+/tests/*.log
+/tests/*.trs
+
+# Copied in from /usr/share/snmp/mibs by the build; see Makefile.am, which does
+#   cp $(snmp_mibdir)/BROCADE-REG-MIB.txt mibs/
+# The other MIBs in that directory are tracked because they ship with the source.
+/mibs/BROCADE-REG-MIB.txt
