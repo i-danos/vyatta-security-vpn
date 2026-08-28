@@ -1,3 +1,9 @@
+vyatta-security-vpn (2.18) unstable; urgency=medium
+
+  * Bind to strongswan-starter.service, the unit Debian 13 ships
+
+ -- i-danos dev <dev@i-danos.dev>  Fri, 28 Aug 2026 14:55:31 +0800
+
 vyatta-security-vpn (2.17) unstable; urgency=medium
 
   * Replace given/when with if/elsif in the VPN Perl modules.

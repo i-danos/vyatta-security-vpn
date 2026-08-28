@@ -154,7 +154,19 @@ def ppformat(val):
     return PP.pformat(val)
 
 def ipsec_running():
-    return os.system("systemctl -q is-active strongswan") == 0
+    # Debian 13 ships strongswan-starter.service and no strongswan.service.
+    # "systemctl -q is-active strongswan" therefore exits 4 (no such unit)
+    # rather than 3 (inactive), so this returned False no matter what charon
+    # was doing.
+    #
+    # That is not a cosmetic check. The worker and listener threads are both
+    # "while ipsec_running(): ..." loops, so they started and returned
+    # immediately, leaving the process with nothing but its D-Bus main loop.
+    # The daemon still signalled READY=1 and looked healthy, charon still
+    # brought tunnels to ESTABLISHED, and nothing carried the SAs to the
+    # dataplane: "vplsh -c 'ipsec sad'" stayed at total-sas 0 and traffic
+    # through the tunnel was lost entirely.
+    return os.system("systemctl -q is-active strongswan-starter") == 0
 
 def _dec(string):
     if not string:
