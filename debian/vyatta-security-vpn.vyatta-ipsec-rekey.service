@@ -1,7 +1,16 @@
+# Debian 13 renamed the unit. strongswan.service belonged to the old
+# packaging; trixie ships only strongswan-starter.service, so binding to the
+# old name left this daemon enabled, dead, and with no log at all -- nothing
+# ever pulls in a unit that does not exist, and the wants symlink sat in
+# /etc/systemd/system/strongswan.service.wants/ doing nothing.
+#
+# The visible effect was that IPsec SAs never reached the dataplane:
+# "vplsh -c 'ipsec sad'" reported total-sas 0 with charon up and the tunnel
+# configured, so traffic through it was lost with 100% packet loss.
 [Unit]
 Description=Vyatta IPsec Rekey
-PartOf=strongswan.service
-After=strongswan.service
+PartOf=strongswan-starter.service
+After=strongswan-starter.service
 ConditionPathExists=/etc/vyatta/controller.conf
 
 [Service]
@@ -9,4 +18,4 @@ ExecStart=/opt/vyatta/sbin/vyatta-ipsec-rekey
 Restart=on-failure
 
 [Install]
-WantedBy=strongswan.service
+WantedBy=strongswan-starter.service
