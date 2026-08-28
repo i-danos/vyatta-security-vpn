@@ -11,10 +11,15 @@
 Description=Vyatta IKE SA Daemon
 PartOf=strongswan-starter.service
 After=strongswan-starter.service
-ConditionPathExists=/var/run/charon.vici
+# Not ConditionPathExists: strongswan-starter reports started before charon has
+# created the VICI socket, so the condition was evaluated too early, came out
+# false, and the unit was skipped -- with no retry, because a failed condition
+# is not a failure. Wait for the socket instead. The daemon cannot wait on its
+# own: vici.Session() connects in its constructor and raises if it cannot.
 
 [Service]
 Type=notify
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 60); do [ -S /var/run/charon.vici ] && exit 0; sleep 1; done; exit 1'
 ExecStart=/opt/vyatta/sbin/vyatta-ike-sa-daemon
 Restart=on-failure
 

@@ -1,3 +1,9 @@
+vyatta-security-vpn (2.19) unstable; urgency=medium
+
+  * ike-sa-daemon: wait for the VICI socket rather than test for it once
+
+ -- i-danos dev <dev@i-danos.dev>  Fri, 28 Aug 2026 18:35:30 +0800
+
 vyatta-security-vpn (2.18) unstable; urgency=medium
 
   * Bind to strongswan-starter.service, the unit Debian 13 ships
