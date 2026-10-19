@@ -6,6 +6,7 @@
 
 import os
 import socket
+import subprocess
 import sys
 import time
 import vici
@@ -65,22 +66,57 @@ def setup_dbus():
     else:
         raise ConnectionRefusedError
 
-def setup_vici():
-    s = socket.socket(socket.AF_UNIX)
-    retry = True
-    while True:
-        try:
-            s.connect("/var/run/charon.vici")
-            break
-        except ConnectionRefusedError as e:
-            if retry:
-                os.system('systemctl restart strongswan.service')
-                retry = False
-                time.sleep(2)
-            else:
-                raise(e)
+VICI_SOCKET = '/var/run/charon.vici'
+# The unit this project uses for strongSwan (see vyatta-vpn-op.pl, vpn-config.pl).
+STRONGSWAN_UNIT = 'strongswan-starter.service'
+VICI_RESTART_WAIT = 2 # seconds for charon to open its socket after a restart
+VICI_RESTART_TIMEOUT = 60 # seconds systemctl may take
 
-    return vici.Session(s)
+def _restart_strongswan():
+    """Restart the strongSwan unit. Returns None on success, else a reason."""
+    try:
+        r = subprocess.run(['systemctl', 'restart', STRONGSWAN_UNIT],
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                           universal_newlines=True,
+                           timeout=VICI_RESTART_TIMEOUT)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return str(e)
+    if r.returncode != 0:
+        detail = (r.stderr or r.stdout or '').strip()
+        return 'exit status {}{}'.format(
+            r.returncode, ': ' + detail if detail else '')
+    return None
+
+def setup_vici():
+    """Open a VICI session to charon.
+
+    If the socket refuses connections or does not exist (charon not running or
+    not yet listening), restart STRONGSWAN_UNIT once and retry on a fresh
+    socket. Each failed attempt closes its socket. A failed restart, or a
+    failure after the restart, is raised with a message that says what was
+    tried.
+    """
+    for attempt in (1, 2):
+        s = socket.socket(socket.AF_UNIX)
+        try:
+            s.connect(VICI_SOCKET)
+            return vici.Session(s)
+        except (ConnectionRefusedError, FileNotFoundError) as e:
+            s.close()
+            if attempt == 2:
+                err('cannot connect to {} even after restarting {}: {}'
+                    .format(VICI_SOCKET, STRONGSWAN_UNIT, e))
+                raise
+            why = _restart_strongswan()
+            if why is not None:
+                msg = ('cannot connect to {} ({}) and restarting {} failed: {}'
+                       .format(VICI_SOCKET, e, STRONGSWAN_UNIT, why))
+                err(msg)
+                raise ConnectionRefusedError(msg) from e
+            time.sleep(VICI_RESTART_WAIT)
+        except Exception:
+            s.close()
+            raise
 
 def proposal2str(enc, h, dht):
     """create a proposal from vyatta config values"""
